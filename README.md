@@ -3,6 +3,7 @@ docker buildx build --platform linux/amd64,linux/arm64 --no-cache --push -t kong
 
 ## Steps to use kong in Macs M1
 
+```bash
 <!-- Create a docker volume for kong-->
 docker volume create kong_data
 
@@ -26,3 +27,4 @@ docker exec -it kong_service /bin/bash
     <!-- - kong start
     - kong migrations up
     - kong migrations finish -->
+```

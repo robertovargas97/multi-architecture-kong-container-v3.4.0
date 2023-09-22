@@ -24,9 +24,11 @@ RUN set -ex; \
     esac; \
     apt-get update \
     && if [ "$ASSET" = "ce" ] ; then \
-      apt-get install -y curl \
+      apt-get install -y curl curl nano sudo \
       && UBUNTU_CODENAME=$(cat /etc/os-release | grep UBUNTU_CODENAME | cut -d = -f 2) \
       && curl -fL https://download.konghq.com/gateway-${KONG_VERSION%%.*}.x-ubuntu-${UBUNTU_CODENAME}/pool/all/k/kong/kong_${KONG_VERSION}_$arch.deb -o /tmp/kong.deb \
+      && curl -fL https://raw.githubusercontent.com/IVRTech/wait-for-it/master/wait-for-it.sh -o /wait-for-it.sh \
+      && chmod +x /wait-for-it.sh \
       && apt-get purge -y curl \
       && echo "$KONG_SHA256  /tmp/kong.deb" | sha256sum -c - \
       || exit 1; \
@@ -35,9 +37,6 @@ RUN set -ex; \
       apt-get upgrade -y ; \
     fi; \
     apt-get install -y --no-install-recommends unzip git \
-    # Please update the ubuntu install docs if the below line is changed so that
-    # end users can properly install Kong along with its required dependencies
-    # and that our CI does not diverge from our docs.
     && apt install --yes /tmp/kong.deb \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /tmp/kong.deb \
@@ -52,6 +51,8 @@ RUN set -ex; \
     fi
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
+
+RUN echo "kong ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 USER kong
 

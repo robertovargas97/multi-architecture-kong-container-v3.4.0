@@ -25,6 +25,7 @@ services:
 
   kong_service:
     image: robertovargas/kong_service:v3.4.0
+    platform: linux/arm64
     container_name: kong_service
     networks:
       - kong_network
@@ -37,4 +38,4 @@ services:
       - "8000:8000"
       - "8001:8001"
     tty: true
-    command: sh -c "su -s /bin/sh -c '/wait-for-it.sh kong_database:5432 -- kong start' kong"
+    command: sh -c "/wait-for-it.sh kong_database:5432 -- kong start"

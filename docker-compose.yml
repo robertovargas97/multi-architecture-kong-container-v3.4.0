@@ -1,0 +1,38 @@
+version: '3'
+
+networks:
+  kong_network:
+
+volumes:
+  kong_data:
+
+services:
+  kong_database:
+    image: postgres:12
+    container_name: kong_database
+    volumes:
+      - kong_data:/var/lib/postgresql/data
+    networks:
+      - kong_network
+    environment:
+      POSTGRES_DB: kong
+      POSTGRES_USER: kong
+      POSTGRES_PASSWORD: kong
+    ports:
+      - "5432:5432"
+
+  kong_service:
+    image: robertovargas/kong_service:v3.4.0
+    container_name: kong_service
+    networks:
+      - kong_network
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong_database
+      KONG_PG_PASSWORD: kong
+      KONG_ADMIN_LISTEN: "0.0.0.0:8001"
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+    tty: true
+    command: sh -c "/wait-for-it.sh kong_database:5432 -- kong start"

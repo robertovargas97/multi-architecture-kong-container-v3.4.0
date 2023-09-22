@@ -40,6 +40,7 @@ RUN set -ex; \
     && apt install --yes /tmp/kong.deb \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /tmp/kong.deb \
+    && chown kong:0 /wait-for-it.sh \
     && chown kong:0 /usr/local/bin/kong \
     && chown -R kong:0 /usr/local/kong \
     && ln -sf /usr/local/openresty/bin/resty /usr/local/bin/resty \

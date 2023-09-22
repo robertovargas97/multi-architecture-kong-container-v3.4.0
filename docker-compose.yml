@@ -2,9 +2,11 @@ version: '3'
 
 networks:
   kong_network:
+    name: kong_net 
 
 volumes:
   kong_data:
+    name: kong_data 
 
 services:
   kong_database:
@@ -35,4 +37,4 @@ services:
       - "8000:8000"
       - "8001:8001"
     tty: true
-    command: sh -c "/wait-for-it.sh kong_database:5432 -- kong start"
+    command: sh -c "su -s /bin/sh -c '/wait-for-it.sh kong_database:5432 -- kong start' kong"

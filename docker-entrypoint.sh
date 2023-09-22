@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -Eeo pipefail
 
+# Trap the SIGTERM signal and execute 'kong stop'
+trap 'kong stop' SIGTERM
+
 # usage: file_env VAR [DEFAULT]
 #    ie: file_env 'XYZ_DB_PASSWORD' 'example'
 # (will allow for "$XYZ_DB_PASSWORD_FILE" to fill in the value of

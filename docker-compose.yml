@@ -2,11 +2,12 @@ version: '3'
 
 networks:
   kong_network:
-    name: kong_net 
+    name: kong_net
 
 volumes:
   kong_data:
-    name: kong_data 
+    name: kong_data
+    external: true
 
 services:
   kong_database:

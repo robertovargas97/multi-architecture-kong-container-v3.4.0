@@ -1,8 +1,17 @@
 #!/usr/bin/env bash
 set -Eeo pipefail
 
-# Trap the SIGTERM signal and execute 'kong stop'
-trap 'kong stop' SIGTERM
+
+# Function to stop Kong gracefully
+stop_kong() {
+  kong stop
+}
+
+# Trap the SIGTERM signal and execute stop_kong function
+trap 'stop_kong' SIGTERM
+
+# Trap the SIGQUIT signal and execute stop_kong function
+trap 'stop_kong' SIGQUIT
 
 # usage: file_env VAR [DEFAULT]
 #    ie: file_env 'XYZ_DB_PASSWORD' 'example'
